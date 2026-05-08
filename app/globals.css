@@ -1,0 +1,74 @@
+﻿@import "tailwindcss";
+
+:root {
+  --font-geist: "Geist", system-ui, sans-serif;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist);
+}
+
+body {
+  background: #0a0f1e;
+  color: #f0f0f0;
+  font-family: var(--font-geist), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.gold-text {
+  background: linear-gradient(135deg, #F0D080, #C9A84C, #8B6914);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #111827; }
+::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.45s ease forwards;
+}
+.animate-stagger > * {
+  animation: fadeInUp 0.4s ease forwards;
+  opacity: 0;
+}
+.animate-stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.animate-stagger > *:nth-child(2) { animation-delay: 0.10s; }
+.animate-stagger > *:nth-child(3) { animation-delay: 0.15s; }
+.animate-stagger > *:nth-child(4) { animation-delay: 0.20s; }
+.animate-stagger > *:nth-child(5) { animation-delay: 0.25s; }
+.animate-stagger > *:nth-child(6) { animation-delay: 0.30s; }
+.animate-stagger > *:nth-child(7) { animation-delay: 0.35s; }
+.animate-stagger > *:nth-child(8) { animation-delay: 0.40s; }
+
+.shimmer-gold {
+  background: linear-gradient(90deg, #C9A84C 0%, #F0D080 40%, #C9A84C 60%, #8B6914 100%);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.glass-gold {
+  background: rgba(201,168,76,0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(201,168,76,0.25);
+}
