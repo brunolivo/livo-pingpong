@@ -1,59 +1,130 @@
 ﻿@import "tailwindcss";
 
+/* ── Livo Design System tokens ─────────────────────────────────────────── */
 :root {
-  --font-geist: "Geist", system-ui, sans-serif;
+  --brand-teal:           #007C92;
+  --brand-teal-hover:     #005362;
+  --brand-teal-pressed:   #114454;
+  --brand-teal-subtle:    rgba(0,124,146,0.08);
+  --brand-teal-border:    rgba(0,124,146,0.20);
+
+  --slate-950:  #1C2631;
+  --slate-700:  #405263;
+  --slate-400:  #8AA3B8;
+
+  --ivory-050:  #FBFBF9;
+  --ivory-100:  #F5F5F2;
+  --ivory-200:  #EDEDE8;
+
+  --surface:    #FFFFFF;
+
+  --border:     rgba(0,0,0,0.10);
+  --shadow-sm:  0 2px 4px 1px rgba(12,12,13,0.04);
+  --shadow-md:  0 2px 16px 2px rgba(0,0,0,0.10);
+
+  --success:    #1FC86E;
+  --danger:     #EC221F;
+  --warning:    #FCC804;
+  --info:       #367DDA;
+
+  /* illustration accents */
+  --accent-blue:   #4B99E6;
+  --accent-pink:   #FE85C6;
+  --accent-orange: #FFA538;
+  --accent-bg:     #E6E6DF;
 }
 
-@theme inline {
-  --font-sans: var(--font-geist);
-}
-
+/* ── Base ───────────────────────────────────────────────────────────────── */
 body {
-  background: #0a0f1e;
-  color: #f0f0f0;
-  font-family: var(--font-geist), system-ui, sans-serif;
+  background-color: var(--ivory-100);
+  color: var(--slate-950);
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-.gold-text {
-  background: linear-gradient(135deg, #F0D080, #C9A84C, #8B6914);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
+/* ── Scrollbar ──────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #111827; }
-::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+::-webkit-scrollbar-track { background: var(--ivory-200); }
+::-webkit-scrollbar-thumb { background: var(--slate-400); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--slate-700); }
 
+/* ── Animations ─────────────────────────────────────────────────────────── */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes shimmer {
   0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes pulseRing {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
 }
 
 .animate-fade-in {
-  animation: fadeInUp 0.45s ease forwards;
+  animation: fadeInUp 0.4s ease forwards;
 }
 .animate-stagger > * {
-  animation: fadeInUp 0.4s ease forwards;
+  animation: fadeInUp 0.35s ease forwards;
   opacity: 0;
 }
-.animate-stagger > *:nth-child(1) { animation-delay: 0.05s; }
-.animate-stagger > *:nth-child(2) { animation-delay: 0.10s; }
-.animate-stagger > *:nth-child(3) { animation-delay: 0.15s; }
-.animate-stagger > *:nth-child(4) { animation-delay: 0.20s; }
-.animate-stagger > *:nth-child(5) { animation-delay: 0.25s; }
-.animate-stagger > *:nth-child(6) { animation-delay: 0.30s; }
-.animate-stagger > *:nth-child(7) { animation-delay: 0.35s; }
-.animate-stagger > *:nth-child(8) { animation-delay: 0.40s; }
+.animate-stagger > *:nth-child(1) { animation-delay: 0.04s; }
+.animate-stagger > *:nth-child(2) { animation-delay: 0.08s; }
+.animate-stagger > *:nth-child(3) { animation-delay: 0.12s; }
+.animate-stagger > *:nth-child(4) { animation-delay: 0.16s; }
+.animate-stagger > *:nth-child(5) { animation-delay: 0.20s; }
+.animate-stagger > *:nth-child(6) { animation-delay: 0.24s; }
+.animate-stagger > *:nth-child(7) { animation-delay: 0.28s; }
+.animate-stagger > *:nth-child(8) { animation-delay: 0.32s; }
 
-.shimmer-gold {
-  background: linear-gradient(90deg, #C9A84C 0%, #F0D080 40%, #C9A84C 60%, #8B6914 100%);
+/* ── Livo utility classes ───────────────────────────────────────────────── */
+.livo-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+}
+
+.livo-card-subtle {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.livo-pill {
+  border-radius: 9999px;
+  transition: all 200ms ease;
+}
+
+.livo-pill-btn {
+  border-radius: 9999px;
+  background: var(--brand-teal);
+  color: #fff;
+  font-weight: 500;
+  transition: all 200ms ease;
+  cursor: pointer;
+}
+.livo-pill-btn:hover  { background: var(--brand-teal-hover); }
+.livo-pill-btn:active { background: var(--brand-teal-pressed); transform: scale(0.98) translateY(1px); }
+
+.livo-pill-outline {
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--slate-700);
+  font-weight: 500;
+  transition: all 200ms ease;
+  cursor: pointer;
+}
+.livo-pill-outline:hover { border-color: var(--brand-teal); color: var(--brand-teal); background: var(--brand-teal-subtle); }
+
+.livo-teal-text  { color: var(--brand-teal); }
+.livo-slate-text { color: var(--slate-950); }
+.livo-muted-text { color: var(--slate-400); }
+
+.teal-shimmer {
+  background: linear-gradient(90deg, #007C92 0%, #4B99E6 40%, #007C92 60%, #005362 100%);
   background-size: 200% auto;
   animation: shimmer 3s linear infinite;
   -webkit-background-clip: text;
@@ -61,14 +132,8 @@ body {
   background-clip: text;
 }
 
-.glass {
-  background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.08);
-}
-
-.glass-gold {
-  background: rgba(201,168,76,0.08);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(201,168,76,0.25);
+/* ── Focus ──────────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--brand-teal);
+  outline-offset: 2px;
 }

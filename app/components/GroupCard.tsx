@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { Group, GROUP_MATCHES } from "@/lib/data";
@@ -8,61 +8,64 @@ interface GroupCardProps {
   index: number;
 }
 
-const RING_COLORS: Record<string, string> = {
-  A: "#0085C7",
-  B: "#F4C300",
-  C: "#A8A9AD",
-  D: "#009F6B",
-  E: "#DF0024",
-  F: "#0085C7",
-  G: "#F4C300",
-  H: "#009F6B",
+// Livo illustration accent palette mapped to groups
+const GROUP_ACCENTS: Record<string, { bg: string; text: string; ring: string }> = {
+  A: { bg: "rgba(0,124,146,0.08)",   text: "#007C92", ring: "#007C92" },
+  B: { bg: "rgba(75,153,230,0.10)",  text: "#4B99E6", ring: "#4B99E6" },
+  C: { bg: "rgba(255,165,56,0.10)",  text: "#CC7700", ring: "#FFA538" },
+  D: { bg: "rgba(31,200,110,0.10)",  text: "#17A05A", ring: "#1FC86E" },
+  E: { bg: "rgba(254,133,198,0.12)", text: "#C0357A", ring: "#FE85C6" },
+  F: { bg: "rgba(0,124,146,0.08)",   text: "#007C92", ring: "#007C92" },
+  G: { bg: "rgba(75,153,230,0.10)",  text: "#4B99E6", ring: "#4B99E6" },
+  H: { bg: "rgba(255,165,56,0.10)",  text: "#CC7700", ring: "#FFA538" },
 };
 
 export default function GroupCard({ group, index }: GroupCardProps) {
   const [tab, setTab] = useState<"players" | "matches">("players");
   const matches = GROUP_MATCHES[group.letter];
-  const ringColor = RING_COLORS[group.letter];
+  const accent = GROUP_ACCENTS[group.letter];
 
   return (
     <div
-      className="glass rounded-2xl overflow-hidden animate-fade-in"
+      className="livo-card overflow-hidden animate-fade-in"
       style={{ animationDelay: `${index * 0.07}s`, opacity: 0 }}
     >
       {/* Card header */}
       <div
         className="px-5 py-4 flex items-center justify-between"
-        style={{
-          background: `linear-gradient(135deg, ${ringColor}22, ${ringColor}11)`,
-          borderBottom: `1px solid ${ringColor}33`,
-        }}
+        style={{ background: accent.bg, borderBottom: "1px solid rgba(0,0,0,0.06)" }}
       >
         <div className="flex items-center gap-3">
           <span
-            className="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg"
-            style={{ background: ringColor, color: "#0a0f1e" }}
+            className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm text-white"
+            style={{ background: accent.ring }}
           >
             {group.letter}
           </span>
           <div>
-            <h3 className="font-bold text-white text-sm">Group {group.letter}</h3>
-            <p className="text-xs text-gray-400">{group.players.length} players · {matches.length} matches</p>
+            <h3 className="font-semibold text-sm" style={{ color: "var(--slate-950)" }}>
+              Group {group.letter}
+            </h3>
+            <p className="text-xs" style={{ color: "var(--slate-400)" }}>
+              {group.players.length} players · {matches.length} matches
+            </p>
           </div>
         </div>
-        <span className="text-2xl">🏓</span>
+        <span className="text-xl">🏓</span>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-white/5">
+      <div className="flex border-b" style={{ borderColor: "var(--border)" }}>
         {(["players", "matches"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`flex-1 py-2 text-xs font-semibold uppercase tracking-wider transition-colors ${
-              tab === t
-                ? "text-amber-400 border-b-2 border-amber-400"
-                : "text-gray-500 hover:text-gray-300"
-            }`}
+            className="flex-1 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200"
+            style={{
+              color: tab === t ? accent.text : "var(--slate-400)",
+              borderBottom: tab === t ? `2px solid ${accent.ring}` : "2px solid transparent",
+              background: "transparent",
+            }}
           >
             {t}
           </button>
@@ -72,51 +75,78 @@ export default function GroupCard({ group, index }: GroupCardProps) {
       {/* Content */}
       <div className="p-4">
         {tab === "players" ? (
-          <div className="space-y-2">
-            {/* Standings header */}
-            <div className="grid grid-cols-[auto_1fr_repeat(4,auto)] gap-x-3 text-xs text-gray-500 font-semibold uppercase tracking-wider pb-1 border-b border-white/5">
-              <span className="w-5 text-center">#</span>
+          <div className="space-y-1">
+            {/* Header row */}
+            <div
+              className="grid grid-cols-[20px_1fr_repeat(4,28px)] gap-x-2 text-xs font-semibold uppercase tracking-wider pb-2 mb-1"
+              style={{ color: "var(--slate-400)", borderBottom: "1px solid var(--border)" }}
+            >
+              <span className="text-center">#</span>
               <span>Player</span>
-              <span className="w-5 text-center">P</span>
-              <span className="w-5 text-center">W</span>
-              <span className="w-5 text-center">L</span>
-              <span className="w-8 text-center">Pts</span>
+              <span className="text-center">P</span>
+              <span className="text-center">W</span>
+              <span className="text-center">L</span>
+              <span className="text-center">Pts</span>
             </div>
             {group.players.map((player, i) => (
               <div
                 key={player}
-                className="grid grid-cols-[auto_1fr_repeat(4,auto)] gap-x-3 items-center py-1.5 px-2 rounded-lg hover:bg-white/5 transition-colors"
+                className="grid grid-cols-[20px_1fr_repeat(4,28px)] gap-x-2 items-center py-1.5 px-2 rounded-lg"
+                style={{ background: i % 2 === 0 ? "var(--ivory-050)" : "transparent" }}
               >
-                <span className="w-5 text-center text-xs text-gray-500 font-mono">{i + 1}</span>
-                <span className="text-sm text-white font-medium truncate" title={player}>
+                <span
+                  className="text-center text-xs font-mono font-semibold"
+                  style={{ color: "var(--slate-400)" }}
+                >
+                  {i + 1}
+                </span>
+                <span
+                  className="text-sm font-medium truncate"
+                  style={{ color: "var(--slate-950)" }}
+                  title={player}
+                >
                   {player}
                 </span>
-                <span className="w-5 text-center text-xs text-gray-500">—</span>
-                <span className="w-5 text-center text-xs text-gray-500">—</span>
-                <span className="w-5 text-center text-xs text-gray-500">—</span>
-                <span className="w-8 text-center text-xs font-bold text-gray-400">—</span>
+                {["—", "—", "—", "—"].map((v, ci) => (
+                  <span key={ci} className="text-center text-xs" style={{ color: "var(--slate-400)" }}>
+                    {v}
+                  </span>
+                ))}
               </div>
             ))}
-            <p className="text-xs text-amber-500/70 text-center pt-2 flex items-center justify-center gap-1">
-              <span>✦</span> Top 2 advance to Round of 16 <span>✦</span>
+            <p
+              className="text-xs text-center pt-3 font-medium"
+              style={{ color: accent.text }}
+            >
+              ✦ Top 2 advance to Round of 16
             </p>
           </div>
         ) : (
-          <div className="space-y-2">
-            {matches.map((match) => (
+          <div className="space-y-1">
+            {matches.map((match, mi) => (
               <div
                 key={match.id}
-                className="flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-white/5 transition-colors"
+                className="flex items-center gap-2 py-1.5 px-2 rounded-lg"
+                style={{ background: mi % 2 === 0 ? "var(--ivory-050)" : "transparent" }}
               >
                 <span
-                  className="text-xs font-mono font-bold w-7 shrink-0"
-                  style={{ color: ringColor }}
+                  className="text-xs font-mono font-bold w-7 shrink-0 text-center"
+                  style={{ color: accent.text }}
                 >
                   {match.id}
                 </span>
-                <span className="text-xs text-gray-300 flex-1 truncate text-right">{match.player1}</span>
-                <span className="text-xs text-gray-500 shrink-0 px-1">vs</span>
-                <span className="text-xs text-gray-300 flex-1 truncate">{match.player2}</span>
+                <span
+                  className="text-xs flex-1 truncate text-right"
+                  style={{ color: "var(--slate-700)" }}
+                >
+                  {match.player1}
+                </span>
+                <span className="text-xs shrink-0 px-1 font-semibold" style={{ color: "var(--slate-400)" }}>
+                  vs
+                </span>
+                <span className="text-xs flex-1 truncate" style={{ color: "var(--slate-700)" }}>
+                  {match.player2}
+                </span>
               </div>
             ))}
           </div>

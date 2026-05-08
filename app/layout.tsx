@@ -1,8 +1,9 @@
 ﻿import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Inter, DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const dmSans = DM_Sans({ subsets: ["latin"], weight: ["600", "700"], variable: "--font-dm-sans" });
 
 export const metadata: Metadata = {
   title: "Livo Ping Pong Tournament 2026",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geist.variable} h-full`}>
+    <html lang="en" className={`${inter.variable} ${dmSans.variable} h-full`}>
       <body className="min-h-full antialiased">{children}</body>
     </html>
   );
