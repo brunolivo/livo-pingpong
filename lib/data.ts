@@ -1,4 +1,4 @@
-export const PLAYER_NAMES: string[] = [
+const RAW_PLAYER_NAMES: string[] = [
   "GAYTAN INESTAL, RUBEN",
   "MISIAC, MARIA DE LOS ANGELES",
   "GUIDATI, RICCARDO",
@@ -34,3 +34,15 @@ export const PLAYER_NAMES: string[] = [
   "BANNET MAS, ELISABETH",
   "MIRALLES SOLA, ORIOL",
 ];
+
+function toDisplayName(raw: string): string {
+  if (raw.includes(",")) {
+    const [surname, first] = raw.split(",").map((s) => s.trim());
+    return `${first} ${surname}`.toLowerCase();
+  }
+  return raw.toLowerCase();
+}
+
+export const PLAYER_NAMES: string[] = [...RAW_PLAYER_NAMES].sort((a, b) =>
+  toDisplayName(a).localeCompare(toDisplayName(b))
+);
