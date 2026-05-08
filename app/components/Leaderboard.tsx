@@ -123,6 +123,9 @@ export default function Leaderboard() {
                     {p.wins}W · {p.losses}L
                   </span>
                 </div>
+                <div className="text-xs text-[var(--slate-400)] mt-1">
+                  {p.wins + p.losses} {p.wins + p.losses === 1 ? "match" : "matches"}
+                </div>
               </div>
             );
           })}
@@ -141,6 +144,7 @@ export default function Leaderboard() {
               <th className="text-left px-4 py-3 font-semibold">Player</th>
               <th className="text-center px-3 py-3 font-semibold">Elo</th>
               <th className="text-center px-3 py-3 font-semibold hidden sm:table-cell">±</th>
+              <th className="text-center px-3 py-3 font-semibold hidden sm:table-cell">GP</th>
               <th className="text-center px-3 py-3 font-semibold hidden sm:table-cell">W</th>
               <th className="text-center px-3 py-3 font-semibold hidden sm:table-cell">L</th>
               <th className="text-right px-4 py-3 font-semibold hidden md:table-cell">Win %</th>
@@ -188,6 +192,12 @@ export default function Leaderboard() {
                   </td>
                   <td className="px-3 py-3 text-center hidden sm:table-cell">
                     {hasPlayed && <EloChange delta={p.eloChange} />}
+                  </td>
+                  <td
+                    className="px-3 py-3 text-center hidden sm:table-cell font-semibold"
+                    style={{ color: "var(--slate-950)" }}
+                  >
+                    {hasPlayed ? p.wins + p.losses : "—"}
                   </td>
                   <td
                     className="px-3 py-3 text-center hidden sm:table-cell"
