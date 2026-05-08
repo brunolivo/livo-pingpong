@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { supabase, formatName, type DbMatch } from "@/lib/supabase";
+import { supabase, formatName, computeMatchesWithElo, type DbMatch, type MatchWithElo } from "@/lib/supabase";
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString(undefined, {
@@ -14,6 +14,7 @@ function formatDate(dateStr: string): string {
 
 export default function MatchHistory() {
   const [matches, setMatches] = useState<DbMatch[]>([]);
+  const [eloMatches, setEloMatches] = useState<MatchWithElo[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "approved" | "rejected">("all");
 
@@ -23,7 +24,9 @@ export default function MatchHistory() {
       .select("*")
       .in("status", ["approved", "rejected"])
       .order("resolved_at", { ascending: false });
-    setMatches((data as DbMatch[]) ?? []);
+    const raw = (data as DbMatch[]) ?? [];
+    setMatches(raw);
+    setEloMatches(computeMatchesWithElo(raw));
     setLoading(false);
   }, []);
 
@@ -31,6 +34,7 @@ export default function MatchHistory() {
     load();
   }, [load]);
 
+  const eloMatchMap = new Map(eloMatches.map((m) => [m.id, m]));
   const filtered = filter === "all" ? matches : matches.filter((m) => m.status === filter);
   const approved = matches.filter((m) => m.status === "approved").length;
   const rejected = matches.filter((m) => m.status === "rejected").length;
@@ -75,9 +79,8 @@ export default function MatchHistory() {
       ) : (
         <div className="livo-card overflow-hidden">
           {filtered.map((m, i) => {
-            const loser =
-              m.winner_name === m.player1_name ? m.player2_name : m.player1_name;
             const isApproved = m.status === "approved";
+            const elo = eloMatchMap.get(m.id);
             return (
               <div
                 key={m.id}
@@ -119,17 +122,31 @@ export default function MatchHistory() {
                   )}
                 </div>
 
-                {/* Badge */}
+                {/* Elo badge */}
                 <div className="flex-shrink-0 text-right">
-                  {isApproved ? (
-                    <span className="text-xs font-semibold text-[var(--brand-teal)] bg-[var(--brand-teal-subtle)] px-2.5 py-1 rounded-full">
-                      +1 pt → {formatName(m.winner_name).split(" ")[0]}
-                    </span>
-                  ) : (
+                  {isApproved && elo ? (
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className="text-xs font-bold px-1.5 py-0.5 rounded"
+                        style={{ background: "rgba(31,200,110,0.12)", color: "#1FC86E" }}
+                      >
+                        +{elo.eloChange}
+                      </span>
+                      <span className="text-xs text-[var(--slate-400)]">
+                        {formatName(m.winner_name).split(" ")[0]}
+                      </span>
+                      <span
+                        className="text-xs font-bold px-1.5 py-0.5 rounded"
+                        style={{ background: "rgba(236,34,31,0.10)", color: "#EC221F" }}
+                      >
+                        -{elo.eloChange}
+                      </span>
+                    </div>
+                  ) : !isApproved ? (
                     <span className="text-xs font-semibold text-red-500 bg-red-50 px-2.5 py-1 rounded-full">
                       No points
                     </span>
-                  )}
+                  ) : null}
                 </div>
 
                 {/* Date */}
