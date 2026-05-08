@@ -36,7 +36,8 @@ export default function SubmitMatch() {
 
     setLoading(false);
     if (err) {
-      setError("Something went wrong. Please try again.");
+      console.error("Supabase insert error:", err);
+      setError(`Error ${err.code}: ${err.message}${err.details ? " — " + err.details : ""}`);
     } else {
       setSuccess(true);
       setPlayer1("");
